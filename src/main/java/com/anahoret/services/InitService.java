@@ -4,9 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
-import com.anahoret.actors.APICallActor;
-import com.anahoret.actors.DBManagerActor;
-import com.anahoret.actors.WorkProgressTrackerActor;
+import com.anahoret.actors.*;
 import com.anahoret.actors.messages.api_call.GetProfilePicture;
 import com.anahoret.actors.messages.api_call.GetUserConnection;
 import com.anahoret.actors.messages.api_call.GetUserProfile;
@@ -44,18 +42,24 @@ public class InitService {
                 userProfileCount, userProfilePictureCount, userConnectionCount);
             ActorRef workProgressTracker = actorSystem.actorOf(workProgressTrackerActorProps, "workProgressTracker");
 
-            RoundRobinPool apiCallRoundRobinPool = new RoundRobinPool(appProperties.getRouterPoolSize());
-            Props apiCallRouteeProps = Props.create(APICallActor.class, apiCallService);
-            ActorRef apiCallActor = actorSystem.actorOf(apiCallRoundRobinPool.props(apiCallRouteeProps), "apiCallRouter");
+            ActorRef getProfilePictureAPICallActor = createApiRouter(GetProfilePictureAPICallActor.class, "GetProfilePictureAPICallActor", apiCallService);
+            ActorRef getUserConnectionAPICallActor = createApiRouter(GetUserConnectionAPICallActor.class, "GetUserConnectionAPICallActor", apiCallService);
+            ActorRef getUserProfileAPICallActor = createApiRouter(GetUserProfileAPICallActor.class, "GetUserProfileAPICallActor", apiCallService);
 
-            RoundRobinPool dbManagerRoundRobinPool = new RoundRobinPool(appProperties.getRouterPoolSize());
-            Props dbManagerRouteeProps = Props.create(DBManagerActor.class, dbManagerService, workProgressTracker);
-            actorSystem.actorOf(dbManagerRoundRobinPool.props(dbManagerRouteeProps), "dbManagerRouter");
+            createApiRouter(SaveProfilePictureDBManagerActor.class, "SaveProfilePictureDBManagerActor", dbManagerService, workProgressTracker);
+            createApiRouter(SaveUserConnectionDBManagerActor.class, "SaveUserConnectionDBManagerActor", dbManagerService, workProgressTracker);
+            createApiRouter(SaveUserProfileDBManagerActor.class, "SaveUserProfileDBManagerActor", dbManagerService, workProgressTracker);
 
-            checkUserProfile(apiCallActor);
-            checkUserConnection(apiCallActor);
-            checkProfilePicture(apiCallActor);
+            checkUserProfile(getUserProfileAPICallActor);
+            checkUserConnection(getUserConnectionAPICallActor);
+            checkProfilePicture(getProfilePictureAPICallActor);
         }
+    }
+
+    private ActorRef createApiRouter(Class<?> clazz, String name, Object... args) {
+        RoundRobinPool apiCallRoundRobinPool = new RoundRobinPool(appProperties.getRouterPoolSize());
+        Props apiCallRouteeProps = Props.create(clazz, args);
+        return actorSystem.actorOf(apiCallRoundRobinPool.props(apiCallRouteeProps), name);
     }
 
     private void checkProfilePicture(ActorRef apiCallActor) {
