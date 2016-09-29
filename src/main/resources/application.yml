@@ -1,9 +1,9 @@
 logging.level.com.anahoret: INFO
 
-app.config.profile-picture-api-router-pool-size: 10
-app.config.user-connection-api-router-pool-size: 10
-app.config.user-profile-api-router-pool-size: 10
-
-app.config.profile-picture-db-router-pool-size: 10
-app.config.user-connection-db-router-pool-size: 10
-app.config.user-profile-db-router-pool-size: 10
+app.config:
+  profile-picture-api-router-pool-size: 10
+  user-connection-api-router-pool-size: 10
+  user-profile-api-router-pool-size: 10
+  profile-picture-db-router-pool-size: 10
+  user-connection-db-router-pool-size: 10
+  user-profile-db-router-pool-size: 10
