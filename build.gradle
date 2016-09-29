@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter'
+	compile 'org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE'
 	compile 'org.springframework.boot:spring-boot-configuration-processor:1.4.1.RELEASE'
 	compile 'com.typesafe.akka:akka-actor_2.11:2.4.10'
 	compile group: 'org.projectlombok', name: 'lombok', version: '1.16.10'

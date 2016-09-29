@@ -1,17 +1,19 @@
 package com.anahoret;
 
 import com.anahoret.config.RootConfig;
-import com.anahoret.services.InitService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = RootConfig.class)
-public class AkkaTestJobApplication {
+public class AkkaTestJobApplication  extends SpringBootServletInitializer {
 
-	public AkkaTestJobApplication(InitService initService) {
-		initService.initialCheck();
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(AkkaTestJobApplication.class);
 	}
 
 	public static void main(String[] args) {

@@ -11,6 +11,8 @@ import com.anahoret.actors.messages.api_call.GetUserProfile;
 import com.anahoret.config.AppProperties;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class InitService {
 
@@ -98,5 +100,9 @@ public class InitService {
         }
     }
 
+    @PostConstruct
+    public void init() {
+        initialCheck();
+    }
 
 }
