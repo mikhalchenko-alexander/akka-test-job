@@ -21,6 +21,11 @@ public class InitService {
     private APICallService apiCallService;
     private DBManagerService dbManagerService;
 
+    // Change flags to turn on/off checks
+    private boolean checkUserProfile = true;
+    private boolean checkUserConnection = true;
+    private boolean checkProfilePicture = true;
+
     public InitService(ActorSystem actorSystem, AppProperties appProperties,
                        APICallService apiCallService, DBManagerService dbManagerService) {
         this.actorSystem = actorSystem;
@@ -30,8 +35,13 @@ public class InitService {
     }
 
     public void initialCheck() {
-        if (appProperties.isUserProfile()) {
-            Props workProgressTrackerActorProps = Props.create(WorkProgressTrackerActor.class, 500, 700, 600);
+        if (checkUserProfile || checkUserConnection || checkProfilePicture) {
+            int userProfileCount = checkUserProfile ? 500 : 0;
+            int userProfilePictureCount = checkProfilePicture ? 700 : 0;
+            int userConnectionCount = checkUserConnection ? 600 : 0;
+
+            Props workProgressTrackerActorProps = Props.create(WorkProgressTrackerActor.class,
+                userProfileCount, userProfilePictureCount, userConnectionCount);
             ActorRef workProgressTracker = actorSystem.actorOf(workProgressTrackerActorProps, "workProgressTracker");
 
             RoundRobinPool apiCallRoundRobinPool = new RoundRobinPool(appProperties.getRouterPoolSize());
@@ -49,20 +59,26 @@ public class InitService {
     }
 
     private void checkProfilePicture(ActorRef apiCallActor) {
-        for (int i = 0; i < 700; i++) {
-            apiCallActor.tell(new GetProfilePicture(i), ActorRef.noSender());
+        if (checkProfilePicture) {
+            for (int i = 0; i < 700; i++) {
+                apiCallActor.tell(new GetProfilePicture(i), ActorRef.noSender());
+            }
         }
     }
 
     private void checkUserConnection(ActorRef apiCallActor) {
-        for (int i = 0; i < 600; i++) {
-            apiCallActor.tell(new GetUserConnection(i), ActorRef.noSender());
+        if (checkUserConnection) {
+            for (int i = 0; i < 600; i++) {
+                apiCallActor.tell(new GetUserConnection(i), ActorRef.noSender());
+            }
         }
     }
 
     private void checkUserProfile(ActorRef apiCallActor) {
-        for (int i = 0; i < 500; i++) {
-            apiCallActor.tell(new GetUserProfile(i), ActorRef.noSender());
+        if (checkUserProfile) {
+            for (int i = 0; i < 500; i++) {
+                apiCallActor.tell(new GetUserProfile(i), ActorRef.noSender());
+            }
         }
     }
 
