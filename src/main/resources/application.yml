@@ -1,1 +1,3 @@
+logging.level.com.anahoret: INFO
+
 app.config.router-pool-size: 10

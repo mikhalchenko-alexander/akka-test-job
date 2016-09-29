@@ -1,19 +1,23 @@
 package com.anahoret.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DBManagerService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DBManagerService.class);
+
     public void saveUserProfile(long id) {
-        System.out.println("saveUserProfile(" + id + ")");
+        LOG.info("saveUserProfile(" + id + ")");
     }
 
     public void saveUserConnection(long id) {
-        System.out.println("saveUserConnection(" + id + ")");
+        LOG.info("saveUserConnection(" + id + ")");
     }
 
     public void saveUserProfilePicture(long id) {
-        System.out.println("saveUserProfilePicture(" + id + ")");
+        LOG.info("saveUserProfilePicture(" + id + ")");
     }
 }
