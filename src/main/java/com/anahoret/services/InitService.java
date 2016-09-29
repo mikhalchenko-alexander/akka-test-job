@@ -42,46 +42,58 @@ public class InitService {
                 userProfileCount, userProfilePictureCount, userConnectionCount);
             ActorRef workProgressTracker = actorSystem.actorOf(workProgressTrackerActorProps, "workProgressTracker");
 
-            ActorRef getProfilePictureAPICallActor = createApiRouter(GetProfilePictureAPICallActor.class, "GetProfilePictureAPICallActor", apiCallService);
-            ActorRef getUserConnectionAPICallActor = createApiRouter(GetUserConnectionAPICallActor.class, "GetUserConnectionAPICallActor", apiCallService);
-            ActorRef getUserProfileAPICallActor = createApiRouter(GetUserProfileAPICallActor.class, "GetUserProfileAPICallActor", apiCallService);
-
-            createApiRouter(SaveProfilePictureDBManagerActor.class, "SaveProfilePictureDBManagerActor", dbManagerService, workProgressTracker);
-            createApiRouter(SaveUserConnectionDBManagerActor.class, "SaveUserConnectionDBManagerActor", dbManagerService, workProgressTracker);
-            createApiRouter(SaveUserProfileDBManagerActor.class, "SaveUserProfileDBManagerActor", dbManagerService, workProgressTracker);
-
-            checkUserProfile(getUserProfileAPICallActor);
-            checkUserConnection(getUserConnectionAPICallActor);
-            checkProfilePicture(getProfilePictureAPICallActor);
+            checkUserProfile(workProgressTracker);
+            checkUserConnection(workProgressTracker);
+            checkProfilePicture(workProgressTracker);
         }
     }
 
-    private ActorRef createApiRouter(Class<?> clazz, String name, Object... args) {
-        RoundRobinPool apiCallRoundRobinPool = new RoundRobinPool(appProperties.getRouterPoolSize());
+    private ActorRef createApiRouter(Class<?> clazz, String name, int poolSize, Object... args) {
+        RoundRobinPool apiCallRoundRobinPool = new RoundRobinPool(poolSize);
         Props apiCallRouteeProps = Props.create(clazz, args);
         return actorSystem.actorOf(apiCallRoundRobinPool.props(apiCallRouteeProps), name);
     }
 
-    private void checkProfilePicture(ActorRef apiCallActor) {
+    private void checkProfilePicture(ActorRef workProgressTracker) {
         if (checkProfilePicture) {
+            ActorRef getProfilePictureAPICallActor =
+                createApiRouter(GetProfilePictureAPICallActor.class, "GetProfilePictureAPICallActor",
+                appProperties.getProfilePictureApiRouterPoolSize(), apiCallService);
+
+            createApiRouter(SaveProfilePictureDBManagerActor.class, "SaveProfilePictureDBManagerActor",
+                appProperties.getProfilePictureDbRouterPoolSize(), dbManagerService, workProgressTracker);
+
             for (int i = 0; i < 700; i++) {
-                apiCallActor.tell(new GetProfilePicture(i), ActorRef.noSender());
+                getProfilePictureAPICallActor.tell(new GetProfilePicture(i), ActorRef.noSender());
             }
         }
     }
 
-    private void checkUserConnection(ActorRef apiCallActor) {
+    private void checkUserConnection(ActorRef workProgressTracker) {
         if (checkUserConnection) {
+            ActorRef getUserConnectionAPICallActor =
+                createApiRouter(GetUserConnectionAPICallActor.class, "GetUserConnectionAPICallActor",
+                appProperties.getUserConnectionApiRouterPoolSize(), apiCallService);
+
+            createApiRouter(SaveUserConnectionDBManagerActor.class, "SaveUserConnectionDBManagerActor",
+                    appProperties.getUserConnectionDbRouterPoolSize(), dbManagerService, workProgressTracker);
             for (int i = 0; i < 600; i++) {
-                apiCallActor.tell(new GetUserConnection(i), ActorRef.noSender());
+                getUserConnectionAPICallActor.tell(new GetUserConnection(i), ActorRef.noSender());
             }
         }
     }
 
-    private void checkUserProfile(ActorRef apiCallActor) {
+    private void checkUserProfile(ActorRef workProgressTracker) {
         if (checkUserProfile) {
+            ActorRef getUserProfileAPICallActor =
+                    createApiRouter(GetUserProfileAPICallActor.class, "GetUserProfileAPICallActor",
+                            appProperties.getUserProfileApiRouterPoolSize(), apiCallService);
+
+            createApiRouter(SaveUserProfileDBManagerActor.class, "SaveUserProfileDBManagerActor",
+                    appProperties.getUserProfileDbRouterPoolSize(), dbManagerService, workProgressTracker);
+
             for (int i = 0; i < 500; i++) {
-                apiCallActor.tell(new GetUserProfile(i), ActorRef.noSender());
+                getUserProfileAPICallActor.tell(new GetUserProfile(i), ActorRef.noSender());
             }
         }
     }

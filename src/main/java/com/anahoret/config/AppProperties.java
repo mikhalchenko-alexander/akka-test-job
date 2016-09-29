@@ -9,6 +9,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 public class AppProperties {
 
-    private int routerPoolSize;
+    private int profilePictureApiRouterPoolSize;
+    private int userConnectionApiRouterPoolSize;
+    private int userProfileApiRouterPoolSize;
+
+    private int profilePictureDbRouterPoolSize;
+    private int userConnectionDbRouterPoolSize;
+    private int userProfileDbRouterPoolSize;
 
 }
