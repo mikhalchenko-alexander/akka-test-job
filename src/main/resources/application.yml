@@ -1,0 +1,2 @@
+app.config.user-profile: true
+app.config.router-pool-size: 10
