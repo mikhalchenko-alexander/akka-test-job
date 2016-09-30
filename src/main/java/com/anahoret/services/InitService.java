@@ -39,7 +39,7 @@ public class InitService {
         taskFlagService.setFlagEnabled("checkProfilePicture", true);
     }
 
-    public void initialCheck() {
+    private void initialCheck() {
         initRouters();
         check();
     }
