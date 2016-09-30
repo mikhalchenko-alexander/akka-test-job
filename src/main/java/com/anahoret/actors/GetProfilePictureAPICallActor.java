@@ -17,8 +17,9 @@ public class GetProfilePictureAPICallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
         if (message instanceof GetProfilePicture) {
-            long result = apiCallService.userProfilePictureAPI(((GetProfilePicture) message).getId());
-            forwardToDbManagerRouter(new SaveProfilePicture(result));
+            GetProfilePicture getProfilePicture = (GetProfilePicture) message;
+            long result = apiCallService.userProfilePictureAPI(getProfilePicture.getId());
+            forwardToDbManagerRouter(new SaveProfilePicture(result, getProfilePicture.getWorkProgressTracker()));
         }
     }
 

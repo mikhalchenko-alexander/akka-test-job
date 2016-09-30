@@ -17,8 +17,9 @@ public class GetUserProfileAPICallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
         if (message instanceof GetUserProfile) {
-            long result = apiCallService.userProfilesAPI(((GetUserProfile) message).getId());
-            forwardToDbManagerRouter(new SaveUserProfile(result));
+            GetUserProfile getUserProfile = (GetUserProfile) message;
+            long result = apiCallService.userProfilesAPI(getUserProfile.getId());
+            forwardToDbManagerRouter(new SaveUserProfile(result, getUserProfile.getWorkProgressTracker()));
         }
     }
 

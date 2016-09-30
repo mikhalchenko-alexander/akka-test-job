@@ -17,8 +17,9 @@ public class GetUserConnectionAPICallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
         if (message instanceof GetUserConnection) {
-            long result = apiCallService.userConnectionAPI(((GetUserConnection) message).getId());
-            forwardToDbManagerRouter(new SaveUserConnection(result));
+            GetUserConnection getUserConnection = (GetUserConnection) message;
+            long result = apiCallService.userConnectionAPI(getUserConnection.getId());
+            forwardToDbManagerRouter(new SaveUserConnection(result, getUserConnection.getWorkProgressTracker()));
         }
     }
 

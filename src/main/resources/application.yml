@@ -27,3 +27,7 @@ flyway:
   sql-migration-prefix: migration_
   baseline-on-migrate: true
   schemas: APP
+
+spring.jpa:
+  hibernate:
+    ddl-auto: validate

@@ -25,3 +25,4 @@ nbdist/
 
 target
 SCH_DB
+derby.log

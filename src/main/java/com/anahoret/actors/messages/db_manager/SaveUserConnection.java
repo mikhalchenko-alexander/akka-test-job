@@ -1,5 +1,6 @@
 package com.anahoret.actors.messages.db_manager;
 
+import akka.actor.ActorRef;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,11 @@ import lombok.Setter;
 public class SaveUserConnection implements Comparable<SaveUserConnection> {
 
     private long id;
+    private ActorRef workProgressTracker;
+
+    public SaveUserConnection(ActorRef workProgressTracker) {
+        this.workProgressTracker = workProgressTracker;
+    }
 
     @Override
     public int compareTo(SaveUserConnection other) {
