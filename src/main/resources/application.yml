@@ -10,7 +10,7 @@ app.config:
 
 db.config:
   driver-class: org.apache.derby.jdbc.EmbeddedDriver
-  jdbc-url: jdbc:derby:SCH_DB;create=true
+  jdbc-url: jdbc:derby:memory:SCH_DB;create=true
   jdbc-username:
   jdbc-password:
   idle-connection-test-period-in-minutes: 60
