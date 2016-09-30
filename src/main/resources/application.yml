@@ -7,3 +7,16 @@ app.config:
   profile-picture-db-router-pool-size: 10
   user-connection-db-router-pool-size: 10
   user-profile-db-router-pool-size: 10
+
+db.config:
+  driver-class: org.apache.derby.jdbc.EmbeddedDriver
+  jdbc-url: jdbc:derby:akka-test-job;create=true
+  jdbc-username: derbyuser
+  jdbc-password: derbyuser
+  idle-connection-test-period-in-minutes: 60
+  idle-max-age-in-minutes: 240
+  max-connections-per-partition: 10
+  min-connections-per-partition: 1
+  partition-count: 2
+  acquire-increment: 5
+  statements-cache-size: 100

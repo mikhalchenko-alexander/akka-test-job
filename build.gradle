@@ -32,6 +32,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-configuration-processor:1.4.1.RELEASE'
 	compile 'com.typesafe.akka:akka-actor_2.11:2.4.10'
 	compile group: 'org.projectlombok', name: 'lombok', version: '1.16.10'
+	compile group: 'com.jolbox', name: 'bonecp', version: '0.8.0.RELEASE'
+	compile group: 'org.apache.derby', name: 'derby', version: '10.12.1.1'
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
