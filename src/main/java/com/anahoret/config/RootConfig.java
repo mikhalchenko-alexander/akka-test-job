@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.anahoret.services")
 public class RootConfig {
 
-    @Bean
+    @Bean(destroyMethod = "shutdown")
     public ActorSystem actorSystem() {
         return ActorSystem.create("ActorSystem", ConfigFactory.load());
     }
