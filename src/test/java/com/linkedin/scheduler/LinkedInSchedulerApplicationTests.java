@@ -1,4 +1,4 @@
-package com.linkedin;
+package com.linkedin.scheduler;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
