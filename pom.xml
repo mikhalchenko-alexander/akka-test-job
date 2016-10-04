@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.anahoret</groupId>
-  <artifactId>akka-test-job</artifactId>
+  <artifactId>LinkedInScheduler</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <spring-boot-version>1.4.1.RELEASE</spring-boot-version>
-    <war-name>akka-test-job</war-name>
+    <war-name>LinkedInScheduler</war-name>
   </properties>
 
   <dependencies>
